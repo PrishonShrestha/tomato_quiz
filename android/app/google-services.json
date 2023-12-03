@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "388739077812",
+    "project_id": "game-tomato-675ae",
+    "storage_bucket": "game-tomato-675ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388739077812:android:161af529a5b572d5cfa9e1",
+        "android_client_info": {
+          "package_name": "prishon.game.tomato"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388739077812-o1o1toov24h1r67al0n6o7o867f70kso.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "prishon.game.tomato",
+            "certificate_hash": "ea114318dc4c99c7ffd9c8b850bb96b051e2968e"
+          }
+        },
+        {
+          "client_id": "388739077812-5u9qmgkcik29de1mphm6do1jronq1mao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1l2s9xSQyAqTnG2WefZMiGpJVeTjvZ1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388739077812-5u9qmgkcik29de1mphm6do1jronq1mao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
