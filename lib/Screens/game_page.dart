@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:math';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_tomato/Controllers/game_controller.dart';
 import 'package:game_tomato/Screens/home_page.dart';
+import 'package:game_tomato/Services/FirestoreServices.dart';
 import 'package:http/http.dart' as http;
 
 import '../Models/game_model.dart';
@@ -23,7 +24,10 @@ class _GamePageState extends State<GamePage> {
   Random random = new Random();
 
   GameController gameController = new GameController();
+  
+  final firestoreServices = FirestoreServices();
 
+  final user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -181,6 +185,10 @@ class _GamePageState extends State<GamePage> {
       currentTotalScore = currentTotalScore+10;
       fetchData();
     } else{
+      firestoreServices.updateorCreateData(user!.uid, currentTotalScore);
+      alertDialog(context as BuildContext);
+
+     /*
       showDialog(
           context: context,
           builder: (BuildContext builder){
@@ -214,7 +222,8 @@ class _GamePageState extends State<GamePage> {
                             ),
                             icon: Icon(Icons.refresh, color: Colors.white, size: 30,),
                               onPressed: (){
-                                Navigator.of(context, rootNavigator: true).pop(context);
+                                //Navigator.of(context, rootNavigator: true).pop(context);
+                                Navigator.of(context).pop();
                                 fetchData();
                                 currentTotalScore=0;
                               },
@@ -245,6 +254,7 @@ class _GamePageState extends State<GamePage> {
             );
           }
       );
+      resumeTimer();*/
     }
   }
 
@@ -268,10 +278,88 @@ class _GamePageState extends State<GamePage> {
       final Map<String, dynamic> data = json.decode(response.body);
       setState(() {
         gameModel = GameModel.fromJson(data);
+        //resetTimer();
       });
     } else{
       throw Exception('Failed to load data');
     }
     generateOptions(gameModel.solution);
   }
+
+  Future<dynamic> alertDialog(BuildContext context) async {
+    await showGeneralDialog(
+        context: context,
+        barrierDismissible: false,
+        //builder: (BuildContext builder){
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation){
+          return WillPopScope(
+            onWillPop: () async{
+              return false;
+            },
+            child: Center(
+              child: Container(
+                height: 280,
+                width: 280,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 5,),
+                      Text("Oops! Wrong answer", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none, color: Colors.red),),
+                      SizedBox(height: 10,),
+                      Image(image: AssetImage("assets/images/sadtomato.gif"), height: 100, width: 250, fit: BoxFit.fill,),
+                      SizedBox(height: 10,),
+                      Text("Your total score is", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, decoration: TextDecoration.none, color: Colors.black),),
+                      SizedBox(height: 10,),
+                      Text(currentTotalScore.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, decoration: TextDecoration.none, color: Colors.black),),
+                      SizedBox(height: 10,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF08CA08),
+                            ),
+                            icon: Icon(Icons.refresh, color: Colors.white, size: 30,),
+                            onPressed: (){
+                              Navigator.of(context, rootNavigator: true).pop(context);
+                              //Navigator.of(context).pop();
+                              fetchData();
+                              currentTotalScore=0;
+                            },
+                            label: Text("Replay", style: TextStyle(color: Colors.white, fontSize: 16),),
+                          ),
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                                textStyle: TextStyle(color: Colors.white, fontSize: 16)
+                            ),
+                            icon: Icon(Icons.home, color: Colors.white, size: 30),
+                            onPressed: (){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomePage()),
+                              );
+                              currentTotalScore=0;
+                            },
+                            label: Text("Home", style: TextStyle(color: Colors.white, fontSize: 16),),
+                          ),
+                        ],
+                      )
+
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+    );
+    //resumeTimer();
+  }
+
 }

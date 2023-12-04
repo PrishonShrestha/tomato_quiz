@@ -2,11 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_tomato/Controllers/auth_controller.dart';
 import 'package:game_tomato/Screens/game_page.dart';
+import 'package:game_tomato/Services/FirestoreServices.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
+  var firestoreServices = FirestoreServices();
+  final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -28,6 +31,9 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                firestoreServices.getHighestScore(user!.uid) as String,
+              ),
               ElevatedButton(
                 onPressed: (){
                   Navigator.push(
