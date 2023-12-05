@@ -15,11 +15,12 @@ class AuthNavigator extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           if (snapshot.connectionState == ConnectionState.waiting){
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasData){
-            return HomePage();
+           return HomePage();
+            //return GamePage();
           } else if (snapshot.hasError){
             return Center(child: Text("Error signing in with google"),);
           } else{

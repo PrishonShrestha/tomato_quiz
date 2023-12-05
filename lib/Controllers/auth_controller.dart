@@ -26,6 +26,13 @@ class AuthController extends ChangeNotifier{
       // Once signed in, return the UserCredential
       await FirebaseAuth.instance.signInWithCredential(credential);
 
+      /*final UserDetails userDetails = UserDetails(
+        userId: googleUser!.id,
+        displayName: googleUser.displayName ?? "User",
+        email: googleUser.email,
+        photoUrl: googleUser.photoUrl ?? 'https://img.freepik.com/premium-vector/smiling-tomato-fruit-cartoon-mascot-giving-thumbs-up-vector-illustration-red-tomato-character-wi_714603-685.jpg?w=2000',
+      );*/
+
     } catch(e){
       print("Error: $e");
     }
