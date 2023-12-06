@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:game_tomato/Controllers/auth_controller.dart';
 import 'package:game_tomato/Screens/game_page.dart';
 import 'package:game_tomato/Controllers/firestore_services.dart';
+import 'package:game_tomato/Screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -22,7 +23,7 @@ class HomePage extends StatelessWidget {
           future: firestoreServices.getHighestScore(user!.uid),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Display a loading indicator while waiting
+              return SplashScreen(); //Display loading screen while loading
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else{
@@ -32,7 +33,7 @@ class HomePage extends StatelessWidget {
                 width: size.width,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage("https://i.pinimg.com/564x/43/38/4f/43384f77640c7e61466ef6656e053591.jpg",),
+                      image: AssetImage("assets/images/bg_home.png"),
                       fit: BoxFit.fill,
                     )
                 ),

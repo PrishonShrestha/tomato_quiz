@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:game_tomato/Screens/home_page.dart';
 import 'package:game_tomato/Controllers/firestore_services.dart';
+import 'package:game_tomato/Screens/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,12 +29,16 @@ class _GamePageState extends State<GamePage> {
 
   final user = FirebaseAuth.instance.currentUser;
 
+  late Timer timer;
+  int time = 60;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     fetchData();
     currentTotalScore=0;
+    startTimer();
   }
 
   @override
@@ -42,20 +48,20 @@ class _GamePageState extends State<GamePage> {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("Tomato game"),
+          title: Text(
+              "Tomato Quiz",
+            style: GoogleFonts.courgette(
+                fontSize: 20,
+                color: Colors.black,
+                fontWeight: FontWeight.bold
+            ),
+          ),
+          backgroundColor: Color(0xFFDCF0FA),
         ),
         body: Container(
           height: size.height,
           width: size.width,
-          //color: Colors.white,
-          decoration: BoxDecoration(
-            //color: Color(0xFF83CCD9),
-            /*image: DecorationImage(
-              image: AssetImage("assets/images/"),
-              fit: BoxFit.fill,
-            )*/
-          ),
-
+          color: Color(0xFFDCF0FA),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -94,16 +100,49 @@ class _GamePageState extends State<GamePage> {
                   )
                 ],
               ),
-              SizedBox(height: 20,),
+              //SizedBox(height: 20,),
+              Container(
+                height: 150,
+                width: size.width,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/bgimg1.png"),
+                    fit: BoxFit.fill,
+                  )
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Current score: " + currentTotalScore.toString(),
+                      style: GoogleFonts.courgette(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(
+                      //"Current score: " + currentTotalScore.toString(),
+                      "Time: " +time.toString(),
+                      //style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.courgette(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Text(
-                "Current score: " + currentTotalScore.toString(),
-                //style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  "Select your answer",
                 style: GoogleFonts.courgette(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
@@ -114,6 +153,9 @@ class _GamePageState extends State<GamePage> {
                         //gameController.checkAnswer(optionsList[0], sol!,);
                         checkAns(gameModel!.solution, optionsList[0]);
                       },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF1890C7)
+                      ),
                       child: Container(
                           height: 50,
                           width: 80,
@@ -123,7 +165,7 @@ class _GamePageState extends State<GamePage> {
                                 //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 30,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -135,6 +177,9 @@ class _GamePageState extends State<GamePage> {
                         //gameController.checkAnswer(optionsList[1], sol!,);
                         checkAns(gameModel!.solution, optionsList[1]);
                       },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF1890C7)
+                      ),
                       child: Container(
                           height: 50,
                           width: 80,
@@ -144,7 +189,7 @@ class _GamePageState extends State<GamePage> {
                                 //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 30,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -155,7 +200,7 @@ class _GamePageState extends State<GamePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 30,),
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
@@ -166,6 +211,9 @@ class _GamePageState extends State<GamePage> {
                         //gameController.checkAnswer(optionsList[2], sol!,);
                         checkAns(gameModel!.solution, optionsList[2]);
                       },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF1890C7)
+                      ),
                       child: Container(
                           height: 50,
                           width: 80,
@@ -175,7 +223,7 @@ class _GamePageState extends State<GamePage> {
                                 //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 30,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -187,6 +235,9 @@ class _GamePageState extends State<GamePage> {
                         //gameController.checkAnswer(optionsList[3], sol!,);
                         checkAns(gameModel!.solution, optionsList[3]);
                       },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF1890C7)
+                      ),
                       child: Container(
                           height: 50,
                           width: 80,
@@ -196,7 +247,7 @@ class _GamePageState extends State<GamePage> {
                                 //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 26,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -207,25 +258,58 @@ class _GamePageState extends State<GamePage> {
                   ],
                 ),
               ),
+
             ],
           ),
 
         ),
       );
     } else {
-      return Center(
-          child: Container(height:50, width: 50, child: CircularProgressIndicator())
-      );
+      return SplashScreen();
     }
+  }
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (time == 0) {
+          setState(() {
+            timer.cancel();
+
+          });
+          firestoreServices.updateorCreateData(user!.uid, currentTotalScore);
+          alertDialog(context, "Time over");
+
+        } else {
+          setState(() {
+            time--;
+          });
+        }
+      },
+    );
+  }
+
+  void resetTimer(){
+    setState(() {
+      time=60;
+    });
   }
 
   void checkAns(int correctAns, int userAns){
     if( userAns == correctAns ){
       currentTotalScore = currentTotalScore+10;
       fetchData();
+      timer.cancel();
+      resetTimer();
+      startTimer();
     } else{
+      setState(() {
+        timer.cancel();
+      });
       firestoreServices.updateorCreateData(user!.uid, currentTotalScore);
-      alertDialog(context as BuildContext);
+      alertDialog(context, "Wrong answer");
     }
   }
 
@@ -257,7 +341,7 @@ class _GamePageState extends State<GamePage> {
     generateOptions(gameModel!.solution);
   }
 
-  Future<dynamic> alertDialog(BuildContext context) async {
+  Future<dynamic> alertDialog(BuildContext context, String title) async {
     await showGeneralDialog(
         context: context,
         barrierDismissible: false,
@@ -280,7 +364,7 @@ class _GamePageState extends State<GamePage> {
                   child: Column(
                     children: [
                       SizedBox(height: 5,),
-                      Text("Oops! Wrong answer", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none, color: Colors.red),),
+                      Text("Oops! $title", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, decoration: TextDecoration.none, color: Colors.red),),
                       SizedBox(height: 10,),
                       Image(image: AssetImage("assets/images/sadtomato.gif"), height: 100, width: 250, fit: BoxFit.fill,),
                       SizedBox(height: 10,),
@@ -301,6 +385,8 @@ class _GamePageState extends State<GamePage> {
                               //Navigator.of(context).pop();
                               fetchData();
                               currentTotalScore=0;
+                              resetTimer();
+                              startTimer();
                             },
                             label: Text("Replay", style: TextStyle(color: Colors.white, fontSize: 16),),
                           ),
@@ -333,4 +419,9 @@ class _GamePageState extends State<GamePage> {
     //resumeTimer();
   }
 
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 }

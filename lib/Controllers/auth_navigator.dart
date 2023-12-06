@@ -4,6 +4,7 @@ import 'package:game_tomato/Screens/game_page.dart';
 import 'package:game_tomato/Screens/sign_in_page.dart';
 
 import '../Screens/home_page.dart';
+import '../Screens/splash_screen.dart';
 
 class AuthNavigator extends StatelessWidget {
   const AuthNavigator({super.key});
@@ -15,12 +16,10 @@ class AuthNavigator extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           if (snapshot.connectionState == ConnectionState.waiting){
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return SplashScreen();
           } else if (snapshot.hasData){
            return HomePage();
-            //return GamePage();
+           //return GamePage();
           } else if (snapshot.hasError){
             return Center(child: Text("Error signing in with google"),);
           } else{
