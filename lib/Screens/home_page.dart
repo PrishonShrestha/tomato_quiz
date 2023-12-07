@@ -23,7 +23,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var firestoreServices = FirestoreServices();
   String scoredOn= "";
-
   final user = FirebaseAuth.instance.currentUser;
   ScoreModel scoreModel = ScoreModel(highestScore: 0, timeAchieved: Timestamp.fromDate(DateTime.now()));
 
@@ -33,6 +32,12 @@ class _HomePageState extends State<HomePage> {
     getScoreData();
   }
 
+  /// Retrieves and updates the highest score data for the current user.
+  ///
+  /// This method uses [firestoreServices] to fetch the highest score data for
+  /// the user identified by [user!.uid]. The obtained [ScoreModel] is then stored
+  /// in the [scoreModel] variable, and the [scoredOn] variable is set with a
+  /// formatted date and time string using [DateFormat].
   Future<void> getScoreData() async{
     ScoreModel _scoreModel = await firestoreServices.getHighestScore(user!.uid) ;
     setState(() {
@@ -62,6 +67,19 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(user?.photoURL ?? "https://img.freepik.com/premium-vector/smiling-tomato-fruit-cartoon-mascot-giving-thumbs-up-vector-illustration-red-tomato-character-wi_714603-685.jpg?w=2000"),
+                radius: 30,
+              ),
+              Text(
+                user?.displayName ?? "Username",
+                style: GoogleFonts.courgette(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Color(0xFF09084E),
+                ),
+              ),
+              SizedBox(height: 30,),
               Text(
                 //"Highest: $highest",
                 "Your Highest Score is",

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:game_tomato/Controllers/auth_controller.dart';
 import 'package:provider/provider.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-
-
 
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -14,7 +9,6 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      //color: Colors.black12,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/bg_signin.png"),
@@ -35,7 +29,6 @@ class SignInPage extends StatelessWidget {
           ),
           icon: Image.asset("assets/images/googleicon.png", height: 35, width: 35,),
           label: Text("Sign in with google"),
-
         )
       ),
     );

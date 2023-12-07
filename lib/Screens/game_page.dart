@@ -8,7 +8,6 @@ import 'package:game_tomato/Controllers/firestore_services.dart';
 import 'package:game_tomato/Screens/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-
 import '../Models/question_model.dart';
 
 class GamePage extends StatefulWidget {
@@ -24,9 +23,7 @@ class _GamePageState extends State<GamePage> {
   static int currentTotalScore = 0;
   List<int> optionsList =[];
   Random random = new Random();
-
   final firestoreServices = FirestoreServices();
-
   final user = FirebaseAuth.instance.currentUser;
 
   late Timer timer;
@@ -34,7 +31,6 @@ class _GamePageState extends State<GamePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchData();
     currentTotalScore=0;
@@ -44,6 +40,7 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    /// Checks if GameModel contains the question
     if(gameModel?.question != null){
       return Scaffold(
         appBar: AppBar(
@@ -73,9 +70,7 @@ class _GamePageState extends State<GamePage> {
                       width: size.width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-                        //borderRadius: BorderRadius.all(Radius.circular(30)),
                         image: DecorationImage(
-                          //image: NetworkImage("https://clipart-library.com/img1/1728611.jpg",),
                           image: AssetImage("assets/images/frame.jpg"),
                           fit: BoxFit.fill,
                         ),
@@ -91,7 +86,6 @@ class _GamePageState extends State<GamePage> {
                     child: Center(
                       child: Image.network(
                         gameModel?.question ?? "https://t4.ftcdn.net/jpg/05/69/98/21/360_F_569982133_DzhJ6XJglSrBEqK6dS7cTdUxD5iWotoD.jpg",
-                        //"https://t4.ftcdn.net/jpg/05/69/98/21/360_F_569982133_DzhJ6XJglSrBEqK6dS7cTdUxD5iWotoD.jpg",
                         height: size.height*0.2,
                         width: size.width*0.65,
                         fit: BoxFit.fill,
@@ -123,9 +117,7 @@ class _GamePageState extends State<GamePage> {
                       ),
                     ),
                     Text(
-                      //"Current score: " + currentTotalScore.toString(),
                       "Time: " +time.toString(),
-                      //style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       style: GoogleFonts.courgette(
                           fontSize: 20,
                           color: Colors.black,
@@ -150,7 +142,6 @@ class _GamePageState extends State<GamePage> {
                   children: [
                     ElevatedButton(
                       onPressed: (){
-                        //gameController.checkAnswer(optionsList[0], sol!,);
                         checkAns(gameModel!.solution, optionsList[0]);
                       },
                       style: ElevatedButton.styleFrom(
@@ -162,7 +153,6 @@ class _GamePageState extends State<GamePage> {
                           child: Center(
                               child: Text(
                                 optionsList[0].toString(),
-                                //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 30,
                                   color: Colors.white,
@@ -174,7 +164,6 @@ class _GamePageState extends State<GamePage> {
                     ),
                     ElevatedButton(
                       onPressed: (){
-                        //gameController.checkAnswer(optionsList[1], sol!,);
                         checkAns(gameModel!.solution, optionsList[1]);
                       },
                       style: ElevatedButton.styleFrom(
@@ -186,7 +175,6 @@ class _GamePageState extends State<GamePage> {
                           child: Center(
                               child: Text(
                                 optionsList[1].toString(),
-                                //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 30,
                                   color: Colors.white,
@@ -208,7 +196,6 @@ class _GamePageState extends State<GamePage> {
                   children: [
                     ElevatedButton(
                       onPressed: (){
-                        //gameController.checkAnswer(optionsList[2], sol!,);
                         checkAns(gameModel!.solution, optionsList[2]);
                       },
                       style: ElevatedButton.styleFrom(
@@ -220,7 +207,6 @@ class _GamePageState extends State<GamePage> {
                           child: Center(
                               child: Text(
                                 optionsList[2].toString(),
-                                //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 30,
                                   color: Colors.white,
@@ -232,7 +218,6 @@ class _GamePageState extends State<GamePage> {
                     ),
                     ElevatedButton(
                       onPressed: (){
-                        //gameController.checkAnswer(optionsList[3], sol!,);
                         checkAns(gameModel!.solution, optionsList[3]);
                       },
                       style: ElevatedButton.styleFrom(
@@ -244,7 +229,6 @@ class _GamePageState extends State<GamePage> {
                           child: Center(
                               child: Text(
                                 optionsList[3].toString(),
-                                //style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 style: GoogleFonts.courgette(
                                   fontSize: 26,
                                   color: Colors.white,
@@ -254,21 +238,24 @@ class _GamePageState extends State<GamePage> {
                           )
                       ),
                     ),
-
                   ],
                 ),
               ),
-
             ],
           ),
-
         ),
       );
     } else {
+      /// Returns a splashscreen if their is no data in GameModel
       return SplashScreen();
     }
   }
 
+  /// Starts a countdown timer with a duration of 60 seconds.
+  ///
+  /// The timer runs in the background, and when the time reaches 0,
+  /// it cancels the timer, updates or creates user data in Firestore with the
+  /// current total score, and shows an alert dialog with the message "Time over".
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
     timer = new Timer.periodic(
@@ -291,12 +278,21 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  /// Resets the timer to the initial value of 60 seconds.
+  ///
+  /// This method is used to reset the countdown timer back to its initial value.
   void resetTimer(){
     setState(() {
       time=60;
     });
   }
 
+  /// Checks the user's answer against the correct answer.
+  ///
+  /// If the userAns matches the correctAns, the currentTotalScore is increased
+  /// by 10, data is fetched, the timer is canceled, and then reset and restarted.
+  /// If the answers don't match, the timer is canceled, user data is updated,
+  /// and an alert dialog is shown with the message "Wrong answer".
   void checkAns(int correctAns, int userAns){
     if( userAns == correctAns ){
       currentTotalScore = currentTotalScore+10;
@@ -313,6 +309,11 @@ class _GamePageState extends State<GamePage> {
     }
   }
 
+  /// Generates a list of options for a given solution.
+  ///
+  /// The solution is added to the list, and then three more random options
+  /// (different from the solution) are generated and added to the list. The final
+  /// list of options is shuffled.
   void generateOptions(int solution){
     optionsList.clear();
     optionsList.add(solution);
@@ -327,6 +328,14 @@ class _GamePageState extends State<GamePage> {
     print(optionsList);
   }
 
+  /// Fetches game data from the specified API endpoint.
+  ///
+  /// This method performs an HTTP GET request to the given API endpoint and
+  /// retrieves game data. If the request is successful (status code 200), the
+  /// data is decoded and used to update the [gameModel]. If the request fails,
+  /// an exception is thrown with the message 'Failed to load data'.
+  ///
+  /// After fetching the data, the options for the current question are generated.
   Future<void> fetchData() async{
     final response = await http.get(Uri.parse('https://marcconrad.com/uob/tomato/api.php'));
     if(response.statusCode == 200){
@@ -341,6 +350,10 @@ class _GamePageState extends State<GamePage> {
     generateOptions(gameModel!.solution);
   }
 
+  /// Displays an alert dialog with the specified title and additional content.
+  ///
+  /// This method shows a modal dialog with an image, a message, and options to replay or go home.
+  /// The [context] is used to build the dialog, and the [title] is displayed as part of the message.
   Future<dynamic> alertDialog(BuildContext context, String title) async {
     await showGeneralDialog(
         context: context,
@@ -419,6 +432,9 @@ class _GamePageState extends State<GamePage> {
     //resumeTimer();
   }
 
+  /// Disposes of resources when the widget is removed from the tree.
+  ///
+  /// This method cancels the timer to avoid memory leaks when the widget is disposed.
   @override
   void dispose() {
     timer.cancel();

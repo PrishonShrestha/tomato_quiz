@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
+  /// Screen that is display during loading stage
   @override
   Widget build(BuildContext context) {
     return Container(
