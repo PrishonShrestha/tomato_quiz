@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:game_tomato/Screens/game_page.dart';
 import 'package:game_tomato/Screens/sign_in_page.dart';
 
 import '../Screens/home_page.dart';
@@ -19,7 +18,6 @@ class AuthNavigator extends StatelessWidget {
             return SplashScreen();
           } else if (snapshot.hasData){
            return HomePage();
-           //return GamePage();
           } else if (snapshot.hasError){
             return Center(child: Text("Error signing in with google"),);
           } else{

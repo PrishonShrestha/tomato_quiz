@@ -6,6 +6,7 @@ import 'package:game_tomato/Screens/game_page.dart';
 import 'package:game_tomato/Controllers/firestore_services.dart';
 import 'package:game_tomato/Screens/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -38,14 +39,6 @@ class _HomePageState extends State<HomePage> {
       scoreModel=_scoreModel;
       scoredOn = DateFormat('MMM-dd-yy : HH:mm').format(scoreModel.timeAchieved.toDate());
     });
-  }
-
-  Future<void> signOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-    } catch (e) {
-      print('Error signing out: $e');
-    }
   }
 
   @override
@@ -120,7 +113,8 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 10,),
               ElevatedButton(
                 onPressed: (){
-                  signOut();
+                  final provider = Provider.of<AuthController>(context, listen: false);
+                  provider.logoutUser();
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF8F0808),
