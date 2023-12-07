@@ -17,7 +17,7 @@ class SignInPage extends StatelessWidget {
       //color: Colors.black12,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/welcome.png"),
+          image: AssetImage("assets/images/bg_signin.png"),
           fit: BoxFit.fill,
         )
       ),
@@ -29,7 +29,7 @@ class SignInPage extends StatelessWidget {
           },
           style: ElevatedButton.styleFrom(
             fixedSize: Size(size.width*0.7, 60),
-            backgroundColor: Color(0xFFF7F6C1),
+            backgroundColor: Color(0xFFF8F4E9),
             textStyle: TextStyle(fontSize: 18),
             foregroundColor: Colors.black,
           ),

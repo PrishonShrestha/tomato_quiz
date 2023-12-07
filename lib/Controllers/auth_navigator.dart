@@ -25,7 +25,6 @@ class AuthNavigator extends StatelessWidget {
           } else{
             return SignInPage();
           }
-
         },
       ),
     );

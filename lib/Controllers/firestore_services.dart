@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Models/score_model.dart';
+
 class FirestoreServices{
   final CollectionReference _collectionReference = FirebaseFirestore.instance.collection('score');
+  late ScoreModel scoreModel;
 
   Future<void> updateorCreateData(String userId, int score) async {
     DocumentSnapshot documentSnapshot = await _collectionReference.doc(userId).get();
@@ -26,15 +29,20 @@ class FirestoreServices{
     }
   }
 
-  Future<int> getHighestScore(String userId) async{
+  Future<ScoreModel> getHighestScore(String userId) async{
     int highestScore;
+    Timestamp timeAchieved;
     DocumentSnapshot documentSnapshot = await _collectionReference.doc(userId).get();
     if(documentSnapshot.exists){
-      highestScore = documentSnapshot.get('score');
+      //highestScore = documentSnapshot.get('score');
+      highestScore=documentSnapshot.get('score');
+      timeAchieved=documentSnapshot.get('time');
     } else{
-      highestScore=0;
+      //highestScore=0;
+      highestScore=documentSnapshot.get('score');
+      timeAchieved=documentSnapshot.get('time');
     }
-    return highestScore;
+    return ScoreModel(highestScore: highestScore, timeAchieved: timeAchieved);
   }
 
 }

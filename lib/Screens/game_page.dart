@@ -9,7 +9,7 @@ import 'package:game_tomato/Screens/splash_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
-import '../Models/game_model.dart';
+import '../Models/question_model.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({Key? key}) : super(key: key);
